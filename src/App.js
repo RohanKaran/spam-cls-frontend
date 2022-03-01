@@ -40,28 +40,28 @@ function App() {
             Spam Classifier
           </Typography>
         </div>
-        <Container>
+        <Container maxWidth={"md"}>
           <form onSubmit={handleSubmit}>
             <FormControl fullWidth variant={'standard'}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                width: 'inherit',
-                '& > :not(style)': { m: 1 },
-              }}
-            >
-              <TextField
-                helperText="Please enter some texts"
-                id="demo-helper-text-aligned"
-                label="Name"
-                rows={4}
-                multiline
-                fullWidth
-                onChange={(e) => setText(e.target.value)}
-              />
-            </Box>
-          </FormControl>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: 'inherit',
+                  '& > :not(style)': { m: 1 },
+                }}
+              >
+                <TextField
+                  helperText="Please enter some texts"
+                  id="demo-helper-text-aligned"
+                  label="Name"
+                  rows={4}
+                  multiline
+                  fullWidth
+                  onChange={(e) => setText(e.target.value)}
+                />
+              </Box>
+            </FormControl>
             <Button type={"submit"}>
               Predict
             </Button>
