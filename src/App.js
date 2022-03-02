@@ -52,7 +52,7 @@ function App() {
       <div className="App">
         <Container maxWidth={"md"}>
           <div align={'left'} style={{paddingLeft:"0.5rem", paddingTop:"5rem"}}>
-            <Typography variant={"h4"} component={"h1"} style={{fontWeight:500, fontFamily:"Roboto"}} gutterBottom>
+            <Typography variant={"h3"} component={"h1"} style={{fontFamily:"Lato"}} gutterBottom>
               <span style={{color:"#f57c00"}}>Spam </span>Classifier
             </Typography>
             <Button onClick={() => setShow(prev => !prev)} style={{padding:0, marginBottom:"1.5rem"}}>
