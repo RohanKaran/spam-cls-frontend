@@ -1,7 +1,7 @@
 import './App.css';
 import {
   Alert,
-  Box, Container,
+  Box, Button, Container,
   createTheme,
   CssBaseline,
   FormControl,
@@ -12,23 +12,28 @@ import {
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {LoadingButton} from "@mui/lab";
+import ReactJson from 'react-json-view';
 
 function App() {
 
   const [text, setText] = useState("")
   const [res, setRes] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [model, setModel] = useState(null)
+  const [show, setShow] = useState(false)
 
   useEffect(() => {
-    axios.get('https://spam-cls-api.herokuapp.com/').then(r => console.log(r.data.message))
+    axios.get('https://spam-cls-api.herokuapp.com/model-details').then(r => {
+      setModel(JSON.parse(r.data))
+    })
   }, [])
 
   const handleSubmit = async (e) => {
-    setLoading(true)
     e.preventDefault()
     if (text.trim() === ""){
       return
     }
+    setLoading(true)
     await axios.post('https://spam-cls-api.herokuapp.com/prediction', {"texts": [text], "echo_input": true})
       .then(e => {
         setRes(e.data[0].res)
@@ -47,10 +52,16 @@ function App() {
       <div className="App">
         <Container maxWidth={"md"}>
           <div align={'left'} style={{paddingLeft:"0.5rem", paddingTop:"5rem"}}>
-          <Typography variant={"h4"} component={"h1"} style={{fontWeight:500, fontFamily:"Roboto"}} gutterBottom>
-            <span style={{color:"#ffa726"}}>Spam </span>Classifier
-          </Typography>
-        </div>
+            <Typography variant={"h4"} component={"h1"} style={{fontWeight:500, fontFamily:"Roboto"}} gutterBottom>
+              <span style={{color:"#f57c00"}}>Spam </span>Classifier
+            </Typography>
+            <Button onClick={() => setShow(prev => !prev)} style={{padding:0, marginBottom:"1.5rem"}}>
+              Tap to {show ? "hide" : "view"} the Keras Model
+            </Button>
+            {show && <Box>{model ? <ReactJson src={model} theme={"google"}
+                                              style={{background: "#00000000", marginBottom:"1rem"}} />
+              : null}</Box>}
+          </div>
           <form onSubmit={handleSubmit}>
             <FormControl fullWidth variant={'standard'}>
               <Box
@@ -62,7 +73,6 @@ function App() {
                 }}
               >
                 <TextField
-                  helperText="Please enter text"
                   id="demo-helper-text-aligned"
                   label="Text"
                   rows={4}
@@ -72,15 +82,15 @@ function App() {
                 />
               </Box>
             </FormControl>
-            <LoadingButton type={"submit"} loading={loading} variant={"outlined"}>
+            <LoadingButton type={"submit"} loading={loading} variant={"outlined"}  style={{margin:"1rem"}}>
               Predict
             </LoadingButton>
           </form>
 
-          {res ? <div style={{paddingTop:"1rem"}}>
+          {res ? <div style={{marginTop:"1rem"}}>
             {res?.label === "spam" ?
-              <Alert severity={'warning'}>Spam! (Probability: {Math.round(res.value * 100)}%)</Alert>
-              : <Alert>Not Spam (Probability: {Math.round(res.value * 100)}%)</Alert>}
+              <Alert severity={'warning'} variant={"filled"}>Spam! (Probability: {Math.round(res.value * 100)}%)</Alert>
+              : <Alert variant={"filled"}>Not Spam (Probability: {Math.round(res.value * 100)}%)</Alert>}
           </div> : null}
 
         </Container>
