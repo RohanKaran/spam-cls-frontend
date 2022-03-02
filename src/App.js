@@ -1,5 +1,6 @@
 import './App.css';
 import {
+  Alert,
   Box, Button,
   Container,
   createTheme,
@@ -15,6 +16,7 @@ import axios from "axios";
 function App() {
 
   const [text, setText] = useState("")
+  const [res, setRes] = useState(null)
 
   useEffect(() => {
     axios.get('https://spam-cls-api.herokuapp.com/').then(r => console.log(r.data.message))
@@ -22,8 +24,11 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (text.trim() === ""){
+      return
+    }
     await axios.post('https://spam-cls-api.herokuapp.com/prediction', {"texts": [text], "echo_input": true})
-      .then(e => console.log(e.data[0].res))
+      .then(e => setRes(e.data[0].res))
   }
 
   const darkTheme = createTheme({
@@ -35,12 +40,12 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
       <div className="App">
-        <div align={'center'}>
-          <Typography variant={"h2"} component={"h1"} gutterBottom>
-            Spam Classifier
+        <Container maxWidth={"md"}>
+          <div align={'left'} style={{paddingLeft:"0.5rem", paddingTop:"5rem"}}>
+          <Typography variant={"h4"} component={"h1"} style={{fontWeight:500, fontFamily:"Roboto"}} gutterBottom>
+            <span style={{color:"#ffa726"}}>Spam </span>Classifier
           </Typography>
         </div>
-        <Container maxWidth={"md"}>
           <form onSubmit={handleSubmit}>
             <FormControl fullWidth variant={'standard'}>
               <Box
@@ -52,9 +57,9 @@ function App() {
                 }}
               >
                 <TextField
-                  helperText="Please enter some texts"
+                  helperText="Please enter text"
                   id="demo-helper-text-aligned"
-                  label="Name"
+                  label="Text"
                   rows={4}
                   multiline
                   fullWidth
@@ -62,10 +67,16 @@ function App() {
                 />
               </Box>
             </FormControl>
-            <Button type={"submit"}>
+            <Button type={"submit"} gutterBottom>
               Predict
             </Button>
           </form>
+
+          {res ? <div style={{paddingTop:"1rem"}}>
+            {res?.label === "spam" ?
+              <Alert severity={'warning'}>Spam! (Probability: {Math.round(res.value * 100)}%)</Alert>
+              : <Alert>Not Spam (Probability: {Math.round(res.value * 100)}%)</Alert>}
+          </div> : null}
 
         </Container>
       </div>
