@@ -1,2 +1,2 @@
 # Spam Classifier Frontend
-View detailed description [here]()
+[Details](https://github.com/RohanKaran/spam-classifier)
