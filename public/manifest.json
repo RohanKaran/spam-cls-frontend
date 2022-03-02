@@ -3,9 +3,9 @@
   "name": "Spam Text Classifier",
   "icons": [
     {
-      "src": "logo512.png",
+      "src": "spamlogo.jpg",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "97x79"
     }
   ],
   "start_url": ".",

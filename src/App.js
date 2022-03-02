@@ -1,8 +1,7 @@
 import './App.css';
 import {
   Alert,
-  Box, Button,
-  Container,
+  Box, Container,
   createTheme,
   CssBaseline,
   FormControl,
@@ -12,23 +11,29 @@ import {
 } from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {LoadingButton} from "@mui/lab";
 
 function App() {
 
   const [text, setText] = useState("")
   const [res, setRes] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     axios.get('https://spam-cls-api.herokuapp.com/').then(r => console.log(r.data.message))
   }, [])
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault()
     if (text.trim() === ""){
       return
     }
     await axios.post('https://spam-cls-api.herokuapp.com/prediction', {"texts": [text], "echo_input": true})
-      .then(e => setRes(e.data[0].res))
+      .then(e => {
+        setRes(e.data[0].res)
+        setLoading(false)
+      })
   }
 
   const darkTheme = createTheme({
@@ -67,9 +72,9 @@ function App() {
                 />
               </Box>
             </FormControl>
-            <Button type={"submit"} gutterBottom>
+            <LoadingButton type={"submit"} loading={loading} variant={"outlined"}>
               Predict
-            </Button>
+            </LoadingButton>
           </form>
 
           {res ? <div style={{paddingTop:"1rem"}}>
