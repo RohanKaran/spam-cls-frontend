@@ -59,7 +59,8 @@ function App() {
               Loading...
               <br/>
               Taking longer than usual, {" "}
-              <a href={`https://devcenter.heroku.com/articles/free-dyno-hours#dyno-sleeping`}>
+              <a href={`https://devcenter.heroku.com/articles/free-dyno-hours#dyno-sleeping`}
+                 target={"_blank"} rel={"noreferrer"}>
                 learn why
               </a>
             </div>
