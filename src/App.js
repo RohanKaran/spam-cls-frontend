@@ -20,6 +20,8 @@ function App() {
   const [res, setRes] = useState(null)
   const [loading, setLoading] = useState(false)
   const [start, setStart] = useState(true)
+  const [error, setError] = useState(false)
+  const [helperText, setHelpertext] = useState("")
   const [model, setModel] = useState(null)
   const [show, setShow] = useState(false)
 
@@ -33,11 +35,15 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (text.trim() === ""){
+      setError(true)
+      setHelpertext("Cannot be empty!")
       return
     }
     setLoading(true)
     await axios.post('https://spam-cls-api.herokuapp.com/prediction', {"texts": [text], "echo_input": true})
       .then(e => {
+        setError(false)
+        setHelpertext("")
         setRes(e.data[0].res)
         setLoading(false)
       })
@@ -94,6 +100,9 @@ function App() {
                     rows={4}
                     multiline
                     fullWidth
+                    error={error}
+                    helperText={helperText}
+                    autoComplete={"off"}
                     onChange={(e) => setText(e.target.value)}
                   />
                 </Box>
