@@ -26,7 +26,7 @@ function App() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    axios.get('https://spam-cls-api.herokuapp.com/model-details').then(r => {
+    axios.get('https://spamham.fly.dev/model-details').then(r => {
       setModel(JSON.parse(r.data))
       setStart(false)
     })
@@ -40,7 +40,7 @@ function App() {
       return
     }
     setLoading(true)
-    await axios.post('https://spam-cls-api.herokuapp.com/prediction', {"texts": [text], "echo_input": true})
+    await axios.post('https://spamham.fly.dev/prediction', {"texts": [text], "echo_input": true})
       .then(e => {
         setError(false)
         setHelpertext("")
