@@ -26,7 +26,7 @@ function App() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    axios.get('https://spamham-7hpcx.ondigitalocean.app/model-details').then(r => {
+    axios.get('https://spamham-api.onrender.com/model-details').then(r => {
       setModel(JSON.parse(r.data))
       setStart(false)
     })
@@ -40,7 +40,7 @@ function App() {
       return
     }
     setLoading(true)
-    await axios.post('https://spamham-7hpcx.ondigitalocean.app/prediction', {"texts": [text], "echo_input": true})
+    await axios.post('https://spamham-api.onrender.com/prediction', {"texts": [text], "echo_input": true})
       .then(e => {
         setError(false)
         setHelpertext("")
